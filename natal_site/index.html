@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Contagem Regressiva</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      background-color: #4caf50;
+      color: #fff;
+      margin: 0;
+      padding: 0;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    #topo {
+      width: 100%;
+      display: flex;
+     
+      align-items: flex-start;
+      background-color: #4caf50;
+      
+    }
+
+    #topo img {
+      max-width: 100%;
+      height: auto;
+    }
+
+    #center {
+      text-align: center;
+      margin: 0;
+      padding: 0;
+      flex-grow: 1;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+    }
+
+    h1 {
+      margin: 20px 0;
+      color: #e21717;
+    }
+
+    #timer {
+      font-size: 2rem;
+      background: #e21717;
+      color: #fff;
+      display: inline-block;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    #baixo {
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+     
+      background-color: #4caf50;
+    }
+
+   
+  </style>
+</head>
+<body>
+  <div id="topo">
+    <img src="images-removebg-preview.png" alt="Logo">
+  </div>
+
+  <div id="center">
+    <h1>Contagem Regressiva para o Natal!</h1>
+    <div id="timer">Carregando...</div>
+  </div>
+
+  <div id="baixo">
+    <img src="arvore.png" alt="Árvore de Natal">
+  </div>
+
+  <audio id="myAudio">
+    <source src="./audio/christmas-dreams-jingle-bells-268299.mp3" type="audio/mpeg" />
+  </audio>
+
+  <script>
+    // Defina sua data favorita aqui (ano, mês, dia, hora, minuto, segundo)
+    const dataFavorita = new Date("2024-12-25T00:00:00");
+
+    function atualizarContagemRegressiva() {
+      const agora = new Date();
+      const diferenca = dataFavorita - agora;
+
+      if (diferenca <= 0) {
+        document.getElementById("timer").innerHTML = "Chegou o Natal!";
+        playAudio();
+        clearInterval(intervalo); // Para o intervalo
+        return;
+      }
+
+      const dias = Math.floor(diferenca / (1000 * 60 * 60 * 24));
+      const horas = Math.floor((diferenca % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+      const minutos = Math.floor((diferenca % (1000 * 60 * 60)) / (1000 * 60));
+      const segundos = Math.floor((diferenca % (1000 * 60)) / 1000);
+
+      document.getElementById("timer").innerHTML = 
+        `${dias} dias, ${horas.toString().padStart(2, '0')} horas, 
+         ${minutos.toString().padStart(2, '0')} minutos, 
+         ${segundos.toString().padStart(2, '0')} segundos`;
+    }
+
+    // Atualiza o temporizador a cada segundo
+    const intervalo = setInterval(atualizarContagemRegressiva, 1000);
+
+    // Inicializa o temporizador imediatamente ao carregar a página
+    atualizarContagemRegressiva();
+
+    function playAudio() {
+      const audio = document.getElementById("myAudio");
+      console.log(audio.attributes);
+      audio.play();
+    }
+
+
+
+  </script>
+</body>
+</html>
