@@ -75,6 +75,7 @@
 
   <div id="center">
     <h1>Contagem Regressiva para o Natal!</h1>
+    <h1 id="ligar_led"></h1>
     <div id="timer">Carregando...</div>
   </div>
 
@@ -82,50 +83,76 @@
     <img src="arvore.png" alt="Árvore de Natal">
   </div>
 
-  <audio id="myAudio">
+  <audio id="myAudio" preload="auto">
     <source src="./audio/christmas-dreams-jingle-bells-268299.mp3" type="audio/mpeg" />
+    Seu navegador não suporta o elemento de áudio.
+  </audio>
+  <audio id="myAudio2" preload="auto">
+    <source src="./audio/we-wish-you-a-merry-christmas-background-xmas-music-for-video-21-sec-260609.mp3" type="audio/mpeg" />
+    Seu navegador não suporta o elemento de áudio.
   </audio>
 
-  <script>
-    // Defina sua data favorita aqui (ano, mês, dia, hora, minuto, segundo)
-    const dataFavorita = new Date("2024-12-25T00:00:00");
+<script>
+  const dataFavorita = new Date("2024-12-25T00:00:00");
+  let natalChegou = false; // Flag para verificar se já chegou o Natal
 
-    function atualizarContagemRegressiva() {
-      const agora = new Date();
-      const diferenca = dataFavorita - agora;
+  function atualizarContagemRegressiva() {
+    const agora = new Date();
+    const diferenca = dataFavorita - agora;
 
-      if (diferenca <= 0) {
-        document.getElementById("timer").innerHTML = "Chegou o Natal!";
-        playAudio();
-        clearInterval(intervalo); // Para o intervalo
-        return;
-      }
-
-      const dias = Math.floor(diferenca / (1000 * 60 * 60 * 24));
-      const horas = Math.floor((diferenca % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-      const minutos = Math.floor((diferenca % (1000 * 60 * 60)) / (1000 * 60));
-      const segundos = Math.floor((diferenca % (1000 * 60)) / 1000);
-
-      document.getElementById("timer").innerHTML = 
-        `${dias} dias, ${horas.toString().padStart(2, '0')} horas, 
-         ${minutos.toString().padStart(2, '0')} minutos, 
-         ${segundos.toString().padStart(2, '0')} segundos`;
+    if (diferenca <= 0 && !natalChegou) {
+      document.getElementById("timer").innerHTML = "Chegou o Natal!";
+      playAudio();
+      natalChegou = true; // Marca que o Natal chegou
     }
 
-    // Atualiza o temporizador a cada segundo
-    const intervalo = setInterval(atualizarContagemRegressiva, 1000);
+    if (!natalChegou) {
+      const dias = Math.floor(diferenca / (1000 * 60 * 60 * 24));
+      const horasRestantes = Math.floor((diferenca % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+      const minutosRestantes = Math.floor((diferenca % (1000 * 60 * 60)) / (1000 * 60));
+      const segundosRestantes = Math.floor((diferenca % (1000 * 60)) / 1000);
 
-    // Inicializa o temporizador imediatamente ao carregar a página
-    atualizarContagemRegressiva();
+      document.getElementById("timer").innerHTML =
+        `${dias} dias, ${horasRestantes.toString().padStart(2, '0')} horas, 
+         ${minutosRestantes.toString().padStart(2, '0')} minutos, 
+         ${segundosRestantes.toString().padStart(2, '0')} segundos`;
+    }
 
-    function playAudio() {
-      const audio = document.getElementById("myAudio");
-      console.log(audio.attributes);
+    // Verifica a hora e minuto para ligar o LED
+    const horas = agora.getHours();
+    const minutos = agora.getMinutes();
+
+    if (horas === 19 && minutos === 22) {
+      document.getElementById("ligar_led").innerHTML = "Ligou o LED!";
+      hora_do_led(); // Função para acender o LED
+    } else {
+      document.getElementById("ligar_led").innerHTML = "";
+    
+    }
+  }
+
+  // Atualiza o temporizador a cada segundo
+  const intervalo = setInterval(atualizarContagemRegressiva, 1000);
+
+  function playAudio() {
+    const audio = document.getElementById("myAudio");
+    if (audio.paused) {
       audio.play();
     }
+  }
 
+  function hora_do_led() {
+    console.log("LED ligado!");
+    const audio = document.getElementById("myAudio2");
+    if (audio.paused) {
+      audio.play();
+    }
+  }
 
+  // Inicializa o temporizador imediatamente ao carregar a página
+  atualizarContagemRegressiva();
+</script>
 
-  </script>
+  
 </body>
 </html>
